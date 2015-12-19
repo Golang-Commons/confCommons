@@ -46,7 +46,7 @@ func (c *ConfigFile) Read(reader io.Reader) (err error) {
 	buf := bufio.NewReader(reader)
 
 	var section, option string
-	section = "default"
+	section = ""
 	for {
 		l, buferr := buf.ReadString('\n') // parse line-by-line
 		l = strings.TrimSpace(l)
@@ -79,9 +79,6 @@ func (c *ConfigFile) Read(reader io.Reader) (err error) {
 			option = "" // reset multi-line value
 			section = strings.TrimSpace(l[1 : len(l)-1])
 			c.AddSection(section)
-
-		case section == "": // not new section and no section defined so far
-			return ReadError{BlankSection, l}
 
 		default: // other alternatives
 			i := strings.IndexAny(l, "=:")
